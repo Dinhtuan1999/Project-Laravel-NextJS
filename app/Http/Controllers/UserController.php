@@ -36,7 +36,19 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        //
+        if(!$user) {
+                    return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'Users not found'
+                    ], 404);
+                }
+
+                return response()->json([
+                            'success' => true,
+                            'data' => $user,
+                            'message' => 'Users retrieved successfully'
+                        ], 200);
     }
 
     /**
