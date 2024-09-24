@@ -15,10 +15,19 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->get();
+        $q = request()->query('q');
+        $users = User::latest();
+        $limit = request()->query('limit', 4);
+        if($q){
+            $users->where(function($query) use ($q){
+                $query->where('name', 'like','%'.$q.'%');
+                $query->orWhere('email', 'like','%'.$q.'%');
+            });
+        }
+
         return response()->json([
             'success' => true,
-            'data' => $users,
+            'data' => $users->paginate($limit),
             'message' => 'Users retrieved successfully'
         ], 200);
     }
@@ -83,7 +92,6 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, string $id)
     {
-        dd($request->all());
         $user = User::find($id);
 
         if(!$user) {
@@ -112,7 +120,7 @@ class UserController extends Controller
                     'success' => true,
                     'data' => $user,
                     'message' => 'Users updated successfully'
-                ], 200);
+                ], 201);
     }
 
     /**
@@ -120,6 +128,21 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+
+        if(!$user) {
+            return response()->json(
+            [
+                'success' => false,
+                'message' => 'Users not found'
+            ], 404);
+        }
+
+        $user->delete();
+
+        return response()->json([
+                    'success' => true,
+                    'message' => 'Users deleted successfully'
+                ], 200);
     }
 }
