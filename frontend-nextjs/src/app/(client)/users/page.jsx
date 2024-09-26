@@ -1,6 +1,7 @@
 import Link from "next/link";
+import SearchForm from "./SearchForm";
 
-export const metadat = {
+export const metadata = {
     title: "Danh sach nguoi dung"
 }
 
@@ -23,6 +24,7 @@ export default async function UsePage() {
             Them moi
         </Link>
 
+        <SearchForm />
         <table className="table table-bordered">
             <thead>
                 <tr>
@@ -34,9 +36,21 @@ export default async function UsePage() {
                 </tr>
             </thead>
             <tbody>
-
+                {users.data.map((user, index) => (
+                    <tr key={user.id}>
+                        <td>{index + 1}</td>
+                        <td>{user.name}</td>
+                        <td>{user.email}</td>
+                        <td>
+                            <button className="btn btn-warning btn-sm">Edit</button>
+                        </td>
+                        <td>
+                            <button className="btn btn-danger btn-sm">Delete</button>
+                        </td>
+                    </tr>
+                ))}
             </tbody>
         </table>
     </div>
-  )
+    )
 }
