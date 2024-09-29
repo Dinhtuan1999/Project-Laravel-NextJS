@@ -2,16 +2,32 @@
 import SearchForm from "./SearchForm";
 
 export default function UserList({ users }) {
+
+    const getUsers = async () => {
+        try {
+            const response = await fetch(`${process.env.SERVER_API}/users`);
+            if (!response.ok) {
+                // Nếu fetch trả về lỗi (ví dụ: 404 hoặc 500)
+                throw new Error("Failed to fetch users");
+            }
+            return response.json();
+        } catch (error) {
+            // Trả về lỗi nếu không thể fetch dữ liệu
+            console.error("Error fetching users:", error);
+            return { success: false, data: [] }; // Trả về success: false nếu có lỗi
+        }
+    };
+
     const handleSearch = (e) => {
         let keyword = e.target.value;
 
-        console.log(1); // Log giá trị 1 khi sự kiện được kích hoạt
-        console.log('user list',keyword); // Log giá trị của từ khóa tìm kiếm
+        console.log(1);
+        console.log('user list',keyword);
     };
 
     return (
         <>
-            <SearchForm handleSearch={handleSearch} /> {/* Truyền handleSearch vào SearchForm */}
+            <SearchForm handleSearch={handleSearch} />
 
             <table className="table table-bordered">
                 <thead>

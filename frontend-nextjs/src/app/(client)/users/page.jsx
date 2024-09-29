@@ -21,12 +21,10 @@ const getUsers = async () => {
     }
 };
 
-// Component chính
 export default async function UsePage() {
     const { success, data: users } = await getUsers();
 
     if (!success) {
-        // Nếu không lấy được dữ liệu, trả về thông báo lỗi
         return (
             <div>
                 <h2>Không thể tải người dùng</h2>
