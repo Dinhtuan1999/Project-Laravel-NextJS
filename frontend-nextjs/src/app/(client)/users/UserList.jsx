@@ -1,16 +1,23 @@
 "use client";
+
+import React, { useState, useEffect } from "react";
 import SearchForm from "./SearchForm";
+import { debounce } from "@/utils/utils";
 
 export default function UserList({ users }) {
+    const [userData, setUserData] = useState({
+        data: [],
+    });
 
-    const getUsers = async () => {
+    const getUsers = async (q) => {
         try {
-            const response = await fetch(`${process.env.SERVER_API}/users`);
+            const response = await fetch(`${process.env.SERVER_API}/users?q=${q}`);
             if (!response.ok) {
                 // Nếu fetch trả về lỗi (ví dụ: 404 hoặc 500)
                 throw new Error("Failed to fetch users");
             }
-            return response.json();
+            const { data: users } = await response.json();
+            setUserData(users)
         } catch (error) {
             // Trả về lỗi nếu không thể fetch dữ liệu
             console.error("Error fetching users:", error);
@@ -18,12 +25,14 @@ export default function UserList({ users }) {
         }
     };
 
-    const handleSearch = (e) => {
-        let keyword = e.target.value;
+    const handleSearch = debounce((e) => {
+        getUsers(e.target.value);
 
-        console.log(1);
-        console.log('user list',keyword);
-    };
+    })
+
+    useEffect(() => {
+        setUserData(users);
+    }, [])
 
     return (
         <>
@@ -40,7 +49,7 @@ export default function UserList({ users }) {
                 </tr>
                 </thead>
                 <tbody>
-                {users.data.map((user, index) => (
+                {userData.data.map((user, index) => (
                     <tr key={user.id}>
                         <td>{index + 1}</td>
                         <td>{user.name}</td>
