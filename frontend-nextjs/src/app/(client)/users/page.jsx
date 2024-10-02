@@ -5,21 +5,10 @@ export const metadata = {
     title: "Danh sach nguoi dung",
 };
 
-// Hàm lấy dữ liệu người dùng, xử lý lỗi khi fetch thất bại
 const getUsers = async () => {
-    try {
-        const response = await fetch(`${process.env.SERVER_API}/users`);
-        if (!response.ok) {
-            // Nếu fetch trả về lỗi (ví dụ: 404 hoặc 500)
-            throw new Error("Failed to fetch users");
-        }
-        return response.json();
-    } catch (error) {
-        // Trả về lỗi nếu không thể fetch dữ liệu
-        console.error("Error fetching users:", error);
-        return { success: false, data: [] }; // Trả về success: false nếu có lỗi
-    }
-};
+    const response = await fetch(`http://127.0.0.1:8000/api/users/`);
+    return response.json();
+  };
 
 export default async function UsePage() {
     const { success, data: users } = await getUsers();
@@ -31,6 +20,9 @@ export default async function UsePage() {
             </div>
         );
     }
+
+    console.log('dataUser111', users);
+    
 
     return (
         <div>

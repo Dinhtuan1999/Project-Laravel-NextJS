@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import SearchForm from "./SearchForm";
 import { debounce } from "@/utils/utils";
+import Link from "next/link";
 
 export default function UserList({ users }) {
     const [userData, setUserData] = useState({
@@ -24,15 +25,33 @@ export default function UserList({ users }) {
             return { success: false, data: [] }; // Trả về success: false nếu có lỗi
         }
     };
+    const removeUser = async (id) => {
+        const response = await fetch(`${process.env.SERVER_API}/users/${id}`, {
+          method: "DELETE",
+        });
+        return response.ok;
+      };
 
     const handleSearch = debounce((e) => {
         getUsers(e.target.value);
 
     })
 
+    const handleRemoveUser = async (id) => {
+        if (window.confirm("Bạn có chắc chắn?")) {
+          const status = await removeUser(id);
+          if (status) {
+            getUsers("");
+          }
+        }
+      };
+
     useEffect(() => {
         setUserData(users);
     }, [])
+
+    console.log('userData', userData);
+    
 
     return (
         <>
@@ -55,10 +74,12 @@ export default function UserList({ users }) {
                         <td>{user.name}</td>
                         <td>{user.email}</td>
                         <td>
-                            <button className="btn btn-warning btn-sm">Edit</button>
+                            <Link href={`/users/edit/${user.id}`} className="btn btn-warning btn-sm">Edit</Link>
                         </td>
                         <td>
-                            <button className="btn btn-danger btn-sm">Delete</button>
+                            <button className="btn btn-danger btn-sm" 
+                                onClick={() => handleRemoveUser(user.id)}
+                            >Delete</button>
                         </td>
                     </tr>
                 ))}
