@@ -6,8 +6,10 @@ export const metadata = {
 };
 
 const getUsers = async () => {
-    const response = await fetch(`http://127.0.0.1:8000/api/users/`);
-    return response.json();
+    const response = await fetch(`${process.env.SERVER_API}/users`, {
+        cache: "no-store", // Không sử dụng cache
+    });
+        return response.json();
   };
 
 export default async function UsePage() {

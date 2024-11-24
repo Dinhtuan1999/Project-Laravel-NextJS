@@ -6,4 +6,5 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource('users', UserController::class);
-Route::pot('auth/login',[AuthController::class, 'login']);
+Route::post('auth/login',[AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/auth/profile', [AuthController::class, 'profile']);

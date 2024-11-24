@@ -17,8 +17,8 @@ export default function UserList({ users }) {
                 // Nếu fetch trả về lỗi (ví dụ: 404 hoặc 500)
                 throw new Error("Failed to fetch users");
             }
-            const { data: users } = await response.json();
-            setUserData(users)
+            const { data: userList } = await response.json();
+            setUserData(userList)
         } catch (error) {
             // Trả về lỗi nếu không thể fetch dữ liệu
             console.error("Error fetching users:", error);
@@ -50,7 +50,6 @@ export default function UserList({ users }) {
         setUserData(users);
     }, [])
 
-    console.log('userData', userData);
     
 
     return (
