@@ -20,8 +20,7 @@ export const handleCreateUser = async (fromData) => {
 
 export const handleUpdateUser = async (fromData) => {
     const {id, ...data} = Object.fromEntries(fromData);
-    console.log('data', data);
-    
+
     const response = await fetch(`${process.env.SERVER_API}/users/${id}`,{
         method: "PATCH",
         headers: {

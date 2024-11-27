@@ -23,8 +23,7 @@ export default async function UsePage() {
         );
     }
 
-    console.log('dataUser111', users);
-    
+
 
     return (
         <div>
