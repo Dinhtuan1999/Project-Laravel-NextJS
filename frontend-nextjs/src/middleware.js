@@ -1,23 +1,23 @@
 import {NextResponse} from "next/server";
 import {getProfile} from "@/utils/utils";
+import {setSession} from "@/utils/session";
 
 export const middleware = async (request) => {
     const pathname = request.nextUrl.pathname;
-    if (pathname.startsWith('/user')){
-        //check authentication
-        const token = request.cookies.get('token')?.value;
-        if(!token){
-            return NextResponse.redirect(new URL("/auth/login", request.url));
-        }
+    const token = request.cookies.get('token')?.value;
+
+    if (token){
         //verify token
         const {success, user} = await getProfile(token);
-        if(!success){
+        if(!success && pathname.startsWith('/user')){
             return NextResponse.redirect(new URL("/auth/login", request.url));
-
         }
-
+        setSession(token, user);
+    }else if(pathname.startsWith('/user')){
+        return NextResponse.redirect(new URL("/auth/login", request.url));
 
     }
+
 }
 
 export const config = {

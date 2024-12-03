@@ -20,7 +20,6 @@ export const handleLogin = async (formData) =>{
     }
 
     const {success, token } = await response.json();
-    console.log(token);
 
     if(!success){
         console.log('success', success);
